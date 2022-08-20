@@ -6,3 +6,9 @@ out/
 !/broadcast
 /broadcast/*
 /broadcast/*/31337/
+
+# IDE
+.idea
+
+# Mac
+.DS_Store
