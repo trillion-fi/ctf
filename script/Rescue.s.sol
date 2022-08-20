@@ -17,7 +17,7 @@ interface IERC20 {
     function balanceOf(address) external view returns (uint);
 }
 
-// forge script script/Rescue.s.sol --private-key 0xf2fc845ebc441f18638b4840de057810c440f1757ae416ab7678f86755940a4b --rpc-url http://34.123.187.206:8545/354bf741-321b-4240-ae21-2b4359f8c073 --broadcast
+// forge script script/Rescue.s.sol --private-key 0xcc523c617eca3666392ee75b3fb9ba8f9c890e9a427e5d17a97db5ba95e49a26 --rpc-url http://34.123.187.206:8545/e7f0a824-a717-4e8c-998b-f7edaaad743b --broadcast
 contract RescueScript is Script {
     WETH9 public constant weth = WETH9(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2);
     IERC20 usdc = IERC20(0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48);
@@ -34,7 +34,7 @@ contract RescueScript is Script {
     function run() public {
         vm.startBroadcast();
 
-        Setup setup = Setup(0x20e1d292Dbd77A044EdacF6e75E2FF096C53E390);
+        Setup setup = Setup(0xbf067Ab6BDa1aE38696d1b372F5A8f2a56e92994);
         MasterChefHelper mch = setup.mcHelper();
 
         weth.deposit{value : 30 ether}();
