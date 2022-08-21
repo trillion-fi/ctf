@@ -1,11 +1,14 @@
 // SPDX-License-Identifier: UNLICENSED
 
-pragma solidity 0.8.16;
+pragma solidity 0.8.15;
 
 interface ERC20Like {
     function transfer(address dst, uint qty) external returns (bool);
+
     function transferFrom(address src, address dst, uint qty) external returns (bool);
+
     function approve(address dst, uint qty) external returns (bool);
+
     function balanceOf(address who) external view returns (uint);
 }
 
@@ -150,7 +153,8 @@ contract HintFinanceVault {
                 _updateRewardRate(token, extra);
             }
         } else {
-            require(balAfter == balBefore); // don't want random tokens to get stuck
+            require(balAfter == balBefore);
+            // don't want random tokens to get stuck
         }
     }
 
