@@ -3,7 +3,6 @@ pragma solidity 0.8.16;
 import "forge-std/Script.sol";
 import "forge-std/Test.sol";
 import "../src/ElectricSheep/contracts/Setup.sol";
-import "../src/MerkleDrop/contracts/Setup.sol";
 
 interface IERC20 {
     function totalSupply() external view returns (uint);
@@ -28,11 +27,11 @@ interface IERC20 {
 
 contract ElectricSheepScript is Script, Test {
     Setup setup;
-    ERC20 dreamer;
+    IERC20 dreamer;
 
     function setUp() public {
         setup = new Setup();
-        dreamer = setup.DREAMERS();
+        dreamer = IERC20(address(setup.DREAMERS()));
         vm.createSelectFork("eth");
     }
 
