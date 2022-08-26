@@ -4,4 +4,4 @@ out = 'out'
 libs = ['lib']
 
 # See more config options https://github.com/foundry-rs/foundry/tree/master/config
-rpc_endpoints = {ctf = "http://34.66.135.107:8545/9d0a1afc-bf85-4985-895b-9b888b5def95"}
+rpc_endpoints = {ctf = "http://34.66.135.107:8545/9d0a1afc-bf85-4985-895b-9b888b5def95", eth = "https://eth-mainnet.nodereal.io/v1/4221ee0dca9e438bae3923cd2e52e272"}

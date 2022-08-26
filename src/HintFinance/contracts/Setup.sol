@@ -50,7 +50,7 @@ contract Setup {
     }
 
     function isSolved() public view returns (bool) {
-        for (uint256 i = 0; i < underlyingTokens.length; ++i) {
+            for (uint256 i = 0; i < underlyingTokens.length; ++i) {
             address vault = hintFinanceFactory.underlyingToVault(underlyingTokens[i]);
             uint256 vaultUnderlyingBalance = ERC20Like(underlyingTokens[i]).balanceOf(vault);
             if (vaultUnderlyingBalance > initialUnderlyingBalances[i] / 100) return false;
