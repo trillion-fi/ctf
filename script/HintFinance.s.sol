@@ -1,11 +1,10 @@
 pragma solidity 0.8.15;
 
 import "forge-std/Script.sol";
-import "forge-std/Test.sol";
 import "../src/HintFinance/contracts/Setup.sol";
 import "../src/HintFinance/contracts/solution.sol";
 
-contract HintFinanceScript is Script, Test {
+contract HintFinanceScript is Script {
     Setup setup;
     Solution solution;
 
