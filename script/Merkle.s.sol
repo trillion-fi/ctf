@@ -13,7 +13,7 @@ contract MerkleScript is Script, Test {
     MerkleDistributor dist;
 
     function setUp() public {
-        setup = Setup(0xeD308A7635C63552F4952a7FD61E42Ac9569D2F5);
+        setup = new Setup();
         dist = MerkleDistributor(setup.merkleDistributor());
     }
 
@@ -207,6 +207,6 @@ contract MerkleScript is Script, Test {
             dist.claim(index, account, amount, proofs);
         }
 
-        console2.log(setup.isSolved());
+        console2.log("solved?", setup.isSolved());
     }
 }

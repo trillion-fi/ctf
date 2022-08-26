@@ -48,9 +48,10 @@ contract Solution is Test{
             // swap for underlying tokens
             path[1] = tokens[i];
             router.swapExactETHForTokens{value : 1000 ether}(0, path, address(this), block.timestamp);
-            initialBal[tokens[i]] = ERC20Like(tokens[0]).balanceOf(address(this));
             completed[tokens[i]] = false;
             vaults[tokens[i]] = HintFinanceVault(hfFactory.underlyingToVault(tokens[i]));
+            initialBal[tokens[i]] = ERC20Like(tokens[i]).balanceOf(address(vaults[tokens[i]]));
+
         }
         _ERC1820_REGISTRY.setInterfaceImplementer(address(this), _TOKENS_RECIPIENT_INTERFACE_HASH, address(this));
         _ERC1820_REGISTRY.setInterfaceImplementer(address(this), keccak256("AmpTokensRecipient"), address(this));

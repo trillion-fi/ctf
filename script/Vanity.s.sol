@@ -9,14 +9,14 @@ import "../src/Vanity/contracts/Setup.sol";
 contract VanityScript is Script {
     Setup setup;
     function setUp() public {
-        setup = Setup(0x02e6f6bb3AA1fffd285c95c05ea33D21E124E7dD);
+        setup = new Setup();
     }
 
     function run() public {
-        vm.startBroadcast();
         bytes memory signature = hex"74bddd646a036561";
         setup.challenge().solve(0x0000000000000000000000000000000000000002,
             signature
         );
+        console2.log("solved?", setup.isSolved());
     }
 }

@@ -3,12 +3,13 @@
 pragma solidity 0.8.15;
 
 import "./HintFinanceFactory.sol";
+import "forge-std/Test.sol";
 
 interface UniswapV2RouterLike {
     function swapExactETHForTokens(uint amountOutMin, address[] memory path, address to, uint deadline) external payable;
 }
 
-contract Setup {
+contract Setup is Test {
 
     address[3] public underlyingTokens = [
     0x89Ab32156e46F46D02ade3FEcbe5Fc4243B9AAeD,
@@ -53,7 +54,9 @@ contract Setup {
             for (uint256 i = 0; i < underlyingTokens.length; ++i) {
             address vault = hintFinanceFactory.underlyingToVault(underlyingTokens[i]);
             uint256 vaultUnderlyingBalance = ERC20Like(underlyingTokens[i]).balanceOf(vault);
-            if (vaultUnderlyingBalance > initialUnderlyingBalances[i] / 100) return false;
+            if (vaultUnderlyingBalance > initialUnderlyingBalances[i] / 100) {
+                return false;
+            }
         }
         return true;
     }

