@@ -20,7 +20,7 @@ simple task. The meme comes from https://youtu.be/LP1t_pzxKyE?t=251
 
 ## MerkleDrop
 
-This task requires you to claim all tokens from a merkle airdrop contract without claiming all the valid indic.
+This task requires you to claim all tokens from a merkle airdrop contract without claiming all the valid indices.
 
 ```solidity
 function claim(uint256 index, address account, uint96 amount, bytes32[] memory merkleProof) external {
