@@ -165,6 +165,8 @@ PUSH1 14                                         # 14 67
 RETURN                                           # returns "PUSH17 code code"                     
 ```
 
+`0x806011526000526070600e536023600ef3` is compiled from `DUP1 PUSH1 17 MSTORE PUSH1 0 MSTORE PUSH1 112 PUSH1 14
+MSTORE8 PUSH1 67 PUSH1 14 RETURN`.
 
 ## Vanity
 
