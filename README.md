@@ -82,9 +82,49 @@ index: 8, amount: 2966
 
 Using index 8 and fake 19/37 will empty the 75000 tokens.
 
-
-
 ## Rescue
+
+Someone sent WETH to Sushi's MasterChef contract. This task requires us to move the WETH out of the contract.
+
+```solidity
+function swapTokenForPoolToken(uint256 poolId, address tokenIn, uint256 amountIn, uint256 minAmountOut) external {
+    (address lpToken,,,) = masterchef.poolInfo(poolId);
+    address tokenOut0 = UniswapV2PairLike(lpToken).token0();
+    address tokenOut1 = UniswapV2PairLike(lpToken).token1();
+
+    ERC20Like(tokenIn).approve(address(router), type(uint256).max);
+    ERC20Like(tokenOut0).approve(address(router), type(uint256).max);
+    ERC20Like(tokenOut1).approve(address(router), type(uint256).max);
+    ERC20Like(tokenIn).transferFrom(msg.sender, address(this), amountIn);
+
+    // swap for both tokens of the lp pool
+    _swap(tokenIn, tokenOut0, amountIn / 2);
+    _swap(tokenIn, tokenOut1, amountIn / 2);
+
+    // add liquidity and give lp tokens to msg.sender
+    _addLiquidity(tokenOut0, tokenOut1, minAmountOut);
+}
+
+function _addLiquidity(address token0, address token1, uint256 minAmountOut) internal {
+    (,, uint256 amountOut) = router.addLiquidity(
+        token0, 
+        token1, 
+        ERC20Like(token0).balanceOf(address(this)), 
+        ERC20Like(token1).balanceOf(address(this)), 
+        0, 
+        0, 
+        msg.sender, 
+        block.timestamp
+    );
+    require(amountOut >= minAmountOut);
+}
+```
+
+The idea is to trigger the `_addLiquidity` function when we call `swapTokenForPoolToken`.
+
+* Buy exact `10 ether` amount of `DAI` and transfer to `MasterChef`
+* Call `swapTokenForPoolToken` with any other tokens.
+* When `MasterChef` calls router.addLiquidity, it tells the pool to take all its tokens, including the initial 10 WETH and DAI we transferred.
 
 ## SourceCode
 
