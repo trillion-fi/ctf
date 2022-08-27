@@ -205,6 +205,46 @@ Found collision: 1626ba7e95fed565f4010ab111eb8825524035addedf763b65bd3d1c8ec4e5c
 
 ## HintFinance
 
+This task setup 3 typical staking vault with real world tokens: [PNT](https://etherscan.io/token/0x89Ab32156e46F46D02ade3FEcbe5Fc4243B9AAeD), 
+[SAND](https://etherscan.io/token/0x3845badAde8e6dFF049820680d1F14bD3903a5d0), [AMP](https://etherscan.io/token/0xff20817765cb7f73d4bde2e66e067e58d11095c2). 
+Then you need to drain all the 3 vaults to less than 1%.
+
+PNT and AMP are both ERC777 tokens which will call `receiver.tokenReceived` when token is transferred. 
+There are many exploits with these kind of tokens: [cream](https://rekt.news/cream-rekt/). 
+It's an easy task to repeatedly using the reentrancy to re-deposit when withdraw token.
+
+The tricky part is that SAND is not an ERC777 token. The author [reveals](https://twitter.com/rileyholterhus/status/1561656848956108801) 
+that he intentionally tried different names on the flash loan hook to have collision with `approveAndCall` from SAND.
+```solidity
+interface IHintFinanceFlashloanReceiver {
+    function onHintFinanceFlashloan(
+        address token,
+        address factory,
+        uint256 amount,
+        bool isUnderlyingOrReward,
+        bytes memory data
+    ) external;
+}
+
+interface ISand is ERC20Like {
+    function approveAndCall(
+        address _target,
+        uint256 _amount,
+        bytes calldata _data
+    ) external;
+}
+```
+
+* SAND.approveAndCall(VAULT, flashLoanPayload) 
+* SAND calls VAULT.flashloan(flashLoanPayload)
+* VAULT calls SAND.onHintFinanceFlashloan => SAND.approveAndCall
+* VAULT approves all SAND to our contract now
+
+
+
+
+
+
 
   
   
