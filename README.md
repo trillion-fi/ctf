@@ -150,19 +150,19 @@ RETURN
 with some tweaks on code size, the [solution](https://www.evm.codes/playground?unit=Wei&codeType=Mnemonic&code='v7w806011526000526070600e536023600ef3yDUP1~11z~00z~70~0ez8~23~0eyRETURN'~yvwzyMSTOREy%5Cnw%200xvPUSH1%01vwyz~_) is
 
 ```
-# ---- code -----------                              -------- stack ------  ----- memory ---------
-PUSH17 0x806011526000526070600e536023600ef3          # code
-DUP1                                                 # code code
-PUSH1 17                                             # 17 code code
-MSTORE                                               # code                 0000 code
-PUSH1 0                                              # 0 code               0000 code
-MSTORE                                               #                      0000 code code
-PUSH1 112                                            # 112 (PUSH17)
-PUSH1 14                                             # 14 112
-MSTORE8                                              #                      0000 PUSH17 code code
-PUSH1 67                                             # 67
-PUSH1 14                                             # 14 67
-RETURN                                               # returns "PUSH17 code code"                     
+# ---- code -----------                          -------- stack ------  ----- memory ---------
+PUSH17 0x806011526000526070600e536023600ef3      # code
+DUP1                                             # code code
+PUSH1 17                                         # 17 code code
+MSTORE                                           # code                 0000 code
+PUSH1 0                                          # 0 code               0000 code
+MSTORE                                           #                      0000 code code
+PUSH1 112                                        # 112 (PUSH17)
+PUSH1 14                                         # 14 112
+MSTORE8                                          #                      0000 PUSH17 code code
+PUSH1 67                                         # 67
+PUSH1 14                                         # 14 67
+RETURN                                           # returns "PUSH17 code code"                     
 ```
 
 
