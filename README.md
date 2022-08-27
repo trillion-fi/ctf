@@ -138,7 +138,7 @@ s = "; console.log('s =', JSON.stringify(s), s)" ; console.log('s =', JSON.strin
 
 Similar way to do this in EVM
 
-```solidity
+```
 // Part1
 PUSH <Part2 CODE>
 // Part2
@@ -169,6 +169,39 @@ RETURN                                           # returns "PUSH17 code code"
 MSTORE8 PUSH1 67 PUSH1 14 RETURN`.
 
 ## Vanity
+
+This task requires to either send transaction from a address or a contract which has at least 20 zeros. 
+It's impossible to generate an address like that. The only hope is how the contract verify signatures from
+other contracts.
+
+```solidity
+function isValidSignatureNow(
+        address signer,
+        bytes32 hash,
+        bytes memory signature
+    ) internal view returns (bool) {
+        (address recovered, ECDSA.RecoverError error) = ECDSA.tryRecover(hash, signature);
+        if (error == ECDSA.RecoverError.NoError && recovered == signer) {
+            return true;
+        }
+
+        (bool success, bytes memory result) = signer.staticcall(
+            abi.encodeWithSelector(IERC1271.isValidSignature.selector, hash, signature)
+        );
+        return (success && result.length == 32 && abi.decode(result, (bytes4)) == IERC1271.isValidSignature.selector);
+}
+```
+
+As we can't forge a signature for the signer, we failed at `ECDSA.tryRecover` and then the contract will call `signer`
+with `isValidSignature`. To pass the test, we need to get 32 bytes in return and the first 4 bytes should match the signature.
+
+To solve the task, we would use the precompiled `sha256` contract [0x0000000000000000000000000000000000000002](https://etherscan.io/address/0x0000000000000000000000000000000000000002)
+as it returns 32 bytes and accept any input. All we need to do now is to match the 4 bytes sig. We write a [script](src/Vanity/mining.go)
+to brute force `signature` from the input.
+
+```bash
+Found collision: 1626ba7e95fed565f4010ab111eb8825524035addedf763b65bd3d1c8ec4e5cd, rand: 74bddd646a036561
+```
 
 ## HintFinance
 
