@@ -4,4 +4,4 @@ out = 'out'
 libs = ['lib']
 
 # See more config options https://github.com/foundry-rs/foundry/tree/master/config
-rpc_endpoints = {eth = "https://eth-mainnet.nodereal.io/v1/4221ee0dca9e438bae3923cd2e52e272"}
+rpc_endpoints = {eth = "${RPC_MAINNET}"}
