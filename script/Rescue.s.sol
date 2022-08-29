@@ -29,10 +29,7 @@ contract RescueScript is Script {
         vm.createSelectFork("eth");
         setup = (new Setup){value: 10 ether}();
     }
-    // 思路
-    // rescue work logic：swapTokenForPoolToken 会将自身的token1.balance 跟token2.balance进行addLiquidity
-    // 1. 往mch里打入等同于10eth 的dai（此处11eth防止滑点，确保eth能全部拿出）
-    // 2. 随便用个其它第三种币（usdc），call mch的swapTokenForPoolToken
+
     function run() public {
         MasterChefHelper mch = setup.mcHelper();
         weth.deposit{value : 30 ether}();

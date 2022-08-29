@@ -84,7 +84,7 @@ Using index 8 and fake 19/37 will empty the 75000 tokens.
 
 ## Rescue
 
-Someone sent WETH to Sushi's MasterChef contract. This task requires us to move the WETH out of the contract.
+Someone sent WETH to MasterChef contract. This task requires us to move the WETH out of the contract.
 
 ```solidity
 function swapTokenForPoolToken(uint256 poolId, address tokenIn, uint256 amountIn, uint256 minAmountOut) external {
